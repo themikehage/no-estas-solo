@@ -60,3 +60,4 @@
 - [x] Test live site
 - [x] Update AGENTS.md with deploy details
 - [x] Fix WebGL fallback and error boundary
+- [x] Fix Nutt study initial axis type error
