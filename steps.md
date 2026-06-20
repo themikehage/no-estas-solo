@@ -59,3 +59,4 @@
 - [x] Deploy to Coolify
 - [x] Test live site
 - [x] Update AGENTS.md with deploy details
+- [x] Fix WebGL fallback and error boundary
