@@ -56,6 +56,6 @@
 - [ ] Validate: `pnpm run build`
 
 ## Phase 10: Deploy
-- [ ] Deploy to Coolify
-- [ ] Test live site
-- [ ] Update AGENTS.md with deploy details
+- [x] Deploy to Coolify
+- [x] Test live site
+- [x] Update AGENTS.md with deploy details

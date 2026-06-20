@@ -83,24 +83,34 @@ src/
 ### Platform
 - **Service:** Coolify
 - **Project name:** `no-estas-solo`
-- **Production URL:** (to be filled after deploy)
-- **Account:** (to be filled after deploy)
+- **Production URL:** https://no-estas-solo.pages.therry.dev
+- **Account:** Coolify instance at pages.therry.dev
+- **App UUID:** u1d3g87u2bkty5vnp6adgj6e
+- **GitHub repo:** https://github.com/themikehage/no-estas-solo
 
 ### Auth
-- Coolify API access via environment
-- Verify connection before deploy
+- `COOLIFY_API_KEY` env var contains the API token
+- Base URL: `https://pages.therry.dev/api/v1`
 
 ### Deploy Command
 ```bash
-pnpm run build
-# Deploy dist/ to Coolify (specific command depends on Coolify setup)
+# Trigger deployment
+curl -X POST "https://pages.therry.dev/api/v1/deploy?uuid=u1d3g87u2bkty5vnp6adgj6e&force=true" \
+  -H "Authorization: Bearer $COOLIFY_API_KEY"
+
+# Check deployment status
+curl -s "https://pages.therry.dev/api/v1/deployments?application_uuid=u1d3g87u2bkty5vnp6adgj6e&per_page=1" \
+  -H "Authorization: Bearer $COOLIFY_API_KEY" | jq '.[0].status'
 ```
 
 ### Considerations
-- Build output goes to `dist/` directory
-- Static site, no server-side rendering
-- Three.js requires WebGL support (graceful degradation for unsupported browsers)
-- Lenis smooth scroll requires JS (fallback to native scroll)
+- Build pack: `dockerfile` (custom Dockerfile with multi-stage build)
+- Builder: Node 20 Alpine + pnpm
+- Runtime: nginx:alpine serving static files from dist/
+- SPA routing: nginx configured with try_files fallback to index.html
+- Assets cached with immutable headers (1 year)
+- Gzip enabled for text assets
+- Auto-deploys on push to main branch
 
 ## Git Commit Style
 
