@@ -5,7 +5,7 @@ import StatsSection from '@/components/stats/StatsSection'
 import NuttStudySection from '@/components/nutt/NuttStudySection'
 import TestimoniesSection from '@/components/testimonies/TestimoniesSection'
 import ResourcesSection from '@/components/resources/ResourcesSection'
-import Divider from '@/components/ui/Divider'
+import ConstellationDivider from '@/components/ui/ConstellationDivider'
 
 function App() {
   return (
@@ -13,13 +13,13 @@ function App() {
       <ParticleCanvas />
       <Layout>
         <HeroSection />
-        <Divider />
+        <ConstellationDivider />
         <StatsSection />
-        <Divider />
+        <ConstellationDivider />
         <NuttStudySection />
-        <Divider />
+        <ConstellationDivider />
         <TestimoniesSection />
-        <Divider />
+        <ConstellationDivider />
         <ResourcesSection />
       </Layout>
     </>

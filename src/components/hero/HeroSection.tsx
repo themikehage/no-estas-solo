@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 export default function HeroSection() {
+  const prefersReducedMotion = useReducedMotion()
+
   return (
     <section className="relative z-10 min-h-screen flex items-center justify-center px-6">
       <div className="text-center max-w-4xl">
@@ -20,7 +22,24 @@ export default function HeroSection() {
           className="font-display text-6xl md:text-8xl lg:text-9xl text-hospital-white leading-none mb-8"
         >
           No estás
-          <span className="block text-synapse-green">solo</span>
+          <motion.span
+            className="block text-synapse-green"
+            animate={
+              prefersReducedMotion
+                ? {}
+                : {
+                    y: [0, -4, 0],
+                    transition: {
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: 2,
+                    },
+                  }
+            }
+          >
+            solo
+          </motion.span>
         </motion.h1>
 
         <motion.p
@@ -41,13 +60,13 @@ export default function HeroSection() {
         >
           <a
             href="#datos"
-            className="inline-flex items-center justify-center px-8 py-4 bg-synapse-green text-neural-black font-body text-base transition-all hover:bg-synapse-green/80"
+            className="inline-flex items-center justify-center px-8 py-4 bg-synapse-green text-neural-black font-body text-base transition-all hover:bg-synapse-green/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
           >
             Explorar los datos
           </a>
           <a
             href="#ayuda"
-            className="inline-flex items-center justify-center px-8 py-4 border border-hospital-white/20 text-hospital-white font-body text-base transition-all hover:border-hospital-white/60"
+            className="inline-flex items-center justify-center px-8 py-4 border border-hospital-white/20 text-hospital-white font-body text-base transition-all hover:border-hospital-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
           >
             Buscar ayuda
           </a>

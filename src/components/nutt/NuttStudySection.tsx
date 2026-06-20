@@ -3,8 +3,27 @@ import { motion } from 'framer-motion'
 import { substances, axes, studySource, noWorstDrugMessage } from '@/data/nutt-study'
 import SectionHeading from '@/components/ui/SectionHeading'
 import AnimatedSection from '@/components/ui/AnimatedSection'
+import { clsx } from 'clsx'
 
 type AxisId = (typeof axes)[number]['id']
+
+const axisStyles: Record<AxisId, string> = {
+  lethality: 'border-thread-red/40 bg-thread-red/10 text-thread-red',
+  dependency: 'border-dopamine-gold/40 bg-dopamine-gold/10 text-dopamine-gold',
+  socialHarm: 'border-azulejo-blue/40 bg-azulejo-blue/10 text-azulejo-blue',
+}
+
+const axisBarStyles: Record<AxisId, string> = {
+  lethality: 'bg-thread-red',
+  dependency: 'bg-dopamine-gold',
+  socialHarm: 'bg-azulejo-blue',
+}
+
+const axisValueStyles: Record<AxisId, string> = {
+  lethality: 'text-thread-red',
+  dependency: 'text-dopamine-gold',
+  socialHarm: 'text-azulejo-blue',
+}
 
 export default function NuttStudySection() {
   const [activeAxis, setActiveAxis] = useState<AxisId>('lethality')
@@ -33,17 +52,12 @@ export default function NuttStudySection() {
               <button
                 key={axis.id}
                 onClick={() => setActiveAxis(axis.id)}
-                className="px-5 py-3 font-body text-sm transition-all cursor-pointer border"
-                style={{
-                  borderColor:
-                    activeAxis === axis.id ? axis.color : 'rgba(245,245,240,0.1)',
-                  backgroundColor:
-                    activeAxis === axis.id ? `${axis.color}15` : 'transparent',
-                  color:
-                    activeAxis === axis.id
-                      ? axis.color
-                      : 'rgba(245,245,240,0.6)',
-                }}
+                className={clsx(
+                  'px-5 py-3 font-body text-sm transition-all cursor-pointer border focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green',
+                  activeAxis === axis.id
+                    ? axisStyles[axis.id]
+                    : 'border-hospital-white/10 text-hospital-white/60 hover:border-hospital-white/30',
+                )}
               >
                 {axis.label}
               </button>
@@ -58,7 +72,6 @@ export default function NuttStudySection() {
                 const value = Number(
                   substance[activeAxis as keyof typeof substance],
                 )
-                const axis = axes.find((a) => a.id === activeAxis)!
 
                 return (
                   <motion.div
@@ -81,14 +94,15 @@ export default function NuttStudySection() {
                         initial={{ width: 0 }}
                         animate={{ width: `${(value / maxVal) * 100}%` }}
                         transition={{ duration: 0.8, delay: index * 0.03 }}
-                        className="h-full"
-                        style={{ backgroundColor: axis.color }}
+                        className={clsx('h-full', axisBarStyles[activeAxis])}
                       />
                     </div>
 
                     <span
-                      className="font-mono text-sm min-w-[3ch] text-right"
-                      style={{ color: axis.color }}
+                      className={clsx(
+                        'font-mono text-sm min-w-[3ch] text-right',
+                        axisValueStyles[activeAxis],
+                      )}
                     >
                       {value}
                     </span>

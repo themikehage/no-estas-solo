@@ -26,7 +26,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="font-body text-sm text-hospital-white/60 hover:text-hospital-white transition-colors"
+              className="font-body text-sm text-hospital-white/60 hover:text-hospital-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
             >
               {link.label}
             </a>
@@ -35,7 +35,7 @@ export default function Header() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-hospital-white p-2"
+          className="md:hidden text-hospital-white p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
           aria-label="Toggle menu"
         >
           <div className="w-6 h-0.5 bg-current mb-1.5 transition-transform" style={{ transform: isOpen ? 'rotate(45deg) translateY(8px)' : 'none' }} />
@@ -58,7 +58,7 @@ export default function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="font-body text-hospital-white/60 hover:text-hospital-white transition-colors"
+                  className="font-body text-hospital-white/60 hover:text-hospital-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
                 >
                   {link.label}
                 </a>

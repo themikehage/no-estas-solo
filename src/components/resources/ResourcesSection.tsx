@@ -47,14 +47,21 @@ export default function ResourcesSection() {
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-sm text-synapse-green hover:text-synapse-green/80 transition-colors"
+                    className="font-mono text-sm text-synapse-green hover:text-synapse-green/80 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
+                  >
+                    {resource.contact}
+                  </a>
+                ) : resource.type === 'center' ? (
+                  <a
+                    href={`mailto:${resource.contact}`}
+                    className="font-mono text-sm text-synapse-green hover:text-synapse-green/80 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
                   >
                     {resource.contact}
                   </a>
                 ) : (
                   <a
                     href={`tel:${resource.contact.replace(/\s/g, '')}`}
-                    className="font-mono text-lg text-synapse-green hover:text-synapse-green/80 transition-colors"
+                    className="font-mono text-lg text-synapse-green hover:text-synapse-green/80 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-synapse-green"
                   >
                     {resource.contact}
                   </a>
