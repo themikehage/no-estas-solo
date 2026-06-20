@@ -38,3 +38,14 @@ h1, h2, h3, h4, h5, h6 {
 .font-mono {
   font-family: var(--font-mono);
 }
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.5);
+  }
+}

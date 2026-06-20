@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 
 const PARTICLE_COUNT = 300
@@ -8,8 +8,8 @@ const SCROLL_SPEED = 0.001
 export default function ParticleCanvas() {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef(0)
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const frameRef = useRef(0)
+  const [webglFailed, setWebglFailed] = useState(false)
 
   useEffect(() => {
     const container = containerRef.current
@@ -18,6 +18,22 @@ export default function ParticleCanvas() {
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches
+
+    let renderer: THREE.WebGLRenderer
+    try {
+      const canvas = document.createElement('canvas')
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+      if (!gl) {
+        setWebglFailed(true)
+        return
+      }
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    } catch (e) {
+      console.error('WebGL initialization failed:', e)
+      setWebglFailed(true)
+      return
+    }
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(
@@ -28,14 +44,6 @@ export default function ParticleCanvas() {
     )
     camera.position.z = 8
 
-    let renderer: THREE.WebGLRenderer
-    try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    } catch {
-      return
-    }
-
-    rendererRef.current = renderer
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setClearColor(0x000000, 0)
@@ -86,36 +94,20 @@ export default function ParticleCanvas() {
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
     particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
 
-    const particleMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        attribute float size;
-        attribute vec3 color;
-        varying vec3 vColor;
-        void main() {
-          vColor = color;
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (300.0 / -mvPosition.z);
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vColor;
-        void main() {
-          float d = length(gl_PointCoord - vec2(0.5));
-          if (d > 0.5) discard;
-          float alpha = 1.0 - smoothstep(0.2, 0.5, d);
-          gl_FragColor = vec4(vColor, alpha * 0.8);
-        }
-      `,
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
       transparent: true,
-      depthWrite: false,
+      opacity: 0.8,
       blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      sizeAttenuation: true,
     })
 
     const particles = new THREE.Points(particleGeometry, particleMaterial)
     scene.add(particles)
 
-    const maxConnections = 1000
+    const maxConnections = 500
     const linePositions = new Float32Array(maxConnections * 6)
     const lineColors = new Float32Array(maxConnections * 6)
     const lineGeometry = new THREE.BufferGeometry()
@@ -229,7 +221,11 @@ export default function ParticleCanvas() {
         particles.rotation.x += SCROLL_SPEED * 0.3
       }
 
-      renderer.render(scene, camera)
+      try {
+        renderer.render(scene, camera)
+      } catch (e) {
+        console.error('Render error:', e)
+      }
     }
 
     animate()
@@ -248,6 +244,27 @@ export default function ParticleCanvas() {
       }
     }
   }, [])
+
+  if (webglFailed) {
+    return (
+      <div className="fixed inset-0 z-0 bg-gradient-to-br from-neural-black via-azulejo-blue/10 to-neural-black" aria-hidden="true">
+        <div className="absolute inset-0 opacity-20">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 rounded-full bg-synapse-green/50"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `pulse ${2 + Math.random() * 3}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div

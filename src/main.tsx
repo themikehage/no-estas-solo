@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import Lenis from 'lenis'
+import ErrorBoundary from '@/components/ui/ErrorBoundary'
 import './index.css'
 import App from './App.tsx'
 
@@ -21,6 +22,8 @@ requestAnimationFrame(raf)
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
