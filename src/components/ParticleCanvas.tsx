@@ -21,13 +21,6 @@ export default function ParticleCanvas() {
 
     let renderer: THREE.WebGLRenderer
     try {
-      const canvas = document.createElement('canvas')
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-      if (!gl) {
-        setWebglFailed(true)
-        return
-      }
-
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     } catch (e) {
       console.error('WebGL initialization failed:', e)

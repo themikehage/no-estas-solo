@@ -7,7 +7,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection'
 type AxisId = (typeof axes)[number]['id']
 
 export default function NuttStudySection() {
-  const [activeAxis, setActiveAxis] = useState<AxisId>('overallHarm')
+  const [activeAxis, setActiveAxis] = useState<AxisId>('lethality')
 
   const sorted = [...substances].sort((a, b) => {
     const key = activeAxis as keyof typeof a
